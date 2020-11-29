@@ -6,8 +6,10 @@ import pymongo
 import pandas as pd
 from flask import Flask, jsonify
 
-executable_path = {"executable_path": "chrome_driver\chromedriver"}
-browser = Browser("chrome", **executable_path, headless=True)
+def init_browser:
+    # @NOTE: Replace the path with your actual path to the chromedriver
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser("chrome", **executable_path, headless=True)
 
 # page start function for later:
 def page_start(url):
@@ -19,8 +21,9 @@ def page_start(url):
     return soupa
 
 
-def scrape_mars:
+def scrape_mars():
     try:
+        browser = init_browser()
         # Nasa News
         url = 'https://mars.nasa.gov/news/'
         browser.visit(url)
@@ -66,7 +69,22 @@ def scrape_mars:
             html = browser.html
             soupb = bs(html, "html.parser")
             img_url = base_url + soupb.find("img", class_="wide-image")["src"]
-            hemisphere_image_urls.append({"title": title, "img_url": img_url}) 
+            hemisphere_image_urls.append({"title": title, "img_url": img_url})
+
+        # A dictionary for all the values:
+        mars_dict = {
+            "news_title": news_title,
+            "news_p": news_p,
+            "featured_image_url": featured_image_url,
+            "html_table": html_table,
+            "hemisphere_image_urls": hemisphere_image_urls,}
+
+    except Exception as e:
+        print(e)
+
+    browser.quit()
+
+    return mars_dict
 
 
 
