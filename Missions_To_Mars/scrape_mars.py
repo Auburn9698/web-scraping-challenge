@@ -11,7 +11,7 @@ def init_browser:
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser("chrome", **executable_path, headless=True)
 
-# page start function for later:
+# page_start function for later:
 def page_start(url):
     browser.visit(url)
     time.sleep(4)
@@ -21,7 +21,7 @@ def page_start(url):
     return soupa
 
 
-def scrape_mars():
+def scrape_info():
     try:
         browser = init_browser()
         # Nasa News
