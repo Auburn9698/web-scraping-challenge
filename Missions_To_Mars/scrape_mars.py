@@ -72,7 +72,7 @@ def scrape_info():
             hemisphere_image_urls.append({"title": title, "img_url": img_url})
 
         # A dictionary for all the values:
-        mars_dict = {
+        mars_data = {
             "news_title": news_title,
             "news_p": news_p,
             "featured_image_url": featured_image_url,
@@ -84,7 +84,7 @@ def scrape_info():
 
     browser.quit()
 
-    return mars_dict
+    return mars_data
 
 
 
