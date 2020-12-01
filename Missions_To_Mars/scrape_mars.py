@@ -8,6 +8,7 @@ from flask import Flask, jsonify
 
 def init_browser:
     # @NOTE: Replace the path with your actual path to the chromedriver
+    # executable_path = {"executable_path": "C:/chromedriver.exe"}
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser("chrome", **executable_path, headless=True)
 
