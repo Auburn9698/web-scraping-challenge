@@ -66,34 +66,44 @@ def scrape_info():
 
     # Visit Hemisphere Images Site
 
-    hem_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
-    browser.visit(hem_url)
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
+
     html = browser.html
     soup = bs(html, 'html.parser')
 
-    img_results = soup.find_all('div', class_='item')
-    base_url = 'https://astrogeology.usgs.gov'
+    section = soup.find('div', class_='collapsible results')
+    categories = section.find_all('div', class_='description')
+
+    hem_list = []
     url_list = []
-    for result in img_results:
-        page_url = result.find('a')['href']
-        url_list.append(page_url)
+    hem_url_list = []
+    for category in categories:
+        hem = category.find('h3').text.strip()
+        hem_list.append(hem)
+        hem_url = category.find('a')['href']
+        url_list.append(hem_url)
 
-    hem_url_list = [base_url + url for url in url_list]
+    hem_url_list = ['https://astrogeology.usgs.gov' + url for url in url_list]
 
-    hemisphere_image_urls = []
-    for url in hem_url_list:
+    img_urls = []
+    for hem_url in hem_url_list:
+        url = hem_url
         browser.visit(url)
+        browser.click_link_by_partial_text('Open')
         html = browser.html
         soup = bs(html, 'html.parser')
-        
-        title_h2 = soup.find('h2', class_='title')
-        title = title_h2.text.strip()
-        
-        img_div = soup.find('div', class_='downloads')
-        img_url = img_div.find('a', text='Original')['href']
+        section = soup.find('div', class_='container')
+        category = section.find('div', class_='downloads')
+        hem_image = category.find('ul')
+        hem_image_text = hem_image.find('a')
+        hem_image_url = hem_image_text.attrs['href']
+        img_urls.append(hem_image_url)
 
-        img_dict = {'title':title, 'img_url':img_url}
-        hemisphere_image_urls.append(img_dict)
+    hemisphere_image_urls = []
+    for item in range(0,4):
+        hem = {"title": hem_list[item], "img_url": img_urls[item]}
+        hemisphere_image_urls.append(hem)
 
     data = {
         "news_title": news_title,
