@@ -11,15 +11,6 @@ def init_browser():
     return Browser("chrome", **executable_path, headless=False)
 
 
-# page start function for later:
-def page_start(url):
-    browser.visit(url)
-    time.sleep(4)
-
-    html = browser.html
-    soupa = bs(html, "html.parser")
-    return soupa
-
 def scrape_info():
 
     browser = init_browser()
@@ -64,7 +55,7 @@ def scrape_info():
     mars_df.set_index('Mars Fact', inplace=True)
     html_table = mars_df.to_html()
 
-    # Visit Hemisphere Images Site
+    # Visit Hemisphere Image Site
 
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
@@ -120,3 +111,13 @@ def scrape_info():
 if __name__ == "__main__":
     result = scrape_info()
     print(result)
+
+# Saved for later; worked in notebook, kept breaking in flask.  Had to do another way:
+# page start function for later:
+#def page_start(url):
+#    browser.visit(url)
+#    time.sleep(4)
+
+#    html = browser.html
+#    soupa = bs(html, "html.parser")
+#    return soupa
